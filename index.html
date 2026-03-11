@@ -464,6 +464,8 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.3); }
   gtag('js', new Date());
   gtag('config', 'G-M7BHWTQMPL');
 </script>
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>emailjs.init("aHqlF7NpIA9D7Cjso");</script>
 </head>
 <body>
 
@@ -842,7 +844,18 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.3); }
       engage:          (document.querySelector('input[name="engage"]:checked') || {}).value || '',
       budget:          document.getElementById('budget').value,
       extra:           document.getElementById('extra').value,
-    };
+    });
+     
+     // Send via GET request — most reliable for Google Apps Script
+    fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' })
+      .catch(err => console.log('Sheet error:', err));
+
+    // Send automated email via EmailJS
+    emailjs.send("service_1wpcgfs", "template_qndf7q3", {
+      firstName: document.getElementById('firstName').value,
+      email:     document.getElementById('email').value,
+      company:   document.getElementById('company').value,
+    }).catch(err => console.log('Email error:', err));
 
     // Show thank you immediately — don't make user wait
     document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
